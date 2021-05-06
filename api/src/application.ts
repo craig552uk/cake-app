@@ -11,7 +11,7 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 
 // Define Cake class
-class Cake {
+export class Cake {
     id: number;
     name: string;
     comment: string;
@@ -28,7 +28,12 @@ class Cake {
 }
 
 // An array of cakes
-const CAKES: Cake[] = [];
+export let CAKES: Cake[] = [];
+
+// Helper function to reset array during tests
+export function clearCakes(){
+    CAKES = [];
+}
 
 app.get('/', (req, res) => {
     res.json({ message: 'Hello World!' });
@@ -42,7 +47,6 @@ app.get('/cakes/:id', (req, res, next) => {
 
     // Get Cake id from URL
     const id = parseInt(req.params.id, 10);
-    console.log('id', id);
 
     // Find Cake in array
     const cake = CAKES.find( c => c.id === id );
