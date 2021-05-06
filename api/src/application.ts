@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { NextFunction, Request, Response } from 'express';
 import { json, urlencoded } from 'body-parser';
-import { HttpError, NotFound, InternalServerError } from "http-errors";
+import { HttpError, NotFound, InternalServerError, BadRequest } from "http-errors";
 
 // Construct HTTP application
 export const app = express();
@@ -13,16 +13,54 @@ app.use(urlencoded({ extended: true }));
 // Define Cake class
 export class Cake {
     id: number;
-    name: string;
-    comment: string;
-    imageUrl: string;
-    yumFactor: number;
+    name!: string;
+    comment!: string;
+    imageUrl!: string;
+    yumFactor!: number;
 
     constructor(id: number, name: string, comment: string, imageUrl: string, yumFactor: number) {
+
+        if ( !id ) { throw new BadRequest('Cake id is required'); }
+        if ( !Number.isInteger(id) ) { throw new BadRequest('Cake id must be numeric'); }
+
         this.id = id;
+        this.setName(name);
+        this.setComment(comment);
+        this.setImageUrl(imageUrl);
+        this.setYumFactor(yumFactor);
+    }
+
+    update(cake: Partial<Cake>): Cake {
+        if( cake.name ){ this.setName(cake.name); }
+        if( cake.comment ){ this.setComment(cake.comment); }
+        if( cake.imageUrl ){ this.setImageUrl(cake.imageUrl); }
+        if( cake.yumFactor ){ this.setYumFactor(cake.yumFactor); }
+        return this;
+    }
+
+    setName(name:string) {
+        if ( !name ) { throw new BadRequest('Cake name is required'); }
+        if ( name.length === 0 ) { throw new BadRequest('Cake name is required'); }
         this.name = name;
+    }
+
+    setComment(comment: string) {
+        if ( !comment ) { throw new BadRequest('Cake comment is required'); }
+        if ( comment.length < 5 ) { throw new BadRequest('Cake comment must be greater than 5 characters'); }
+        if ( comment.length > 200 ) { throw new BadRequest('Cake comment must be less than 200 characters'); }
         this.comment = comment;
+    }
+
+    setImageUrl(imageUrl: string) {
+        if ( !imageUrl ) { throw new BadRequest('Cake image URL s required'); }
         this.imageUrl = imageUrl;
+    }
+
+    setYumFactor(yumFactor: number) {
+        if ( !yumFactor ) { throw new BadRequest('Cake yum factor is required'); }
+        if ( !Number.isInteger(yumFactor) ) { throw new BadRequest('Cake yum factor must be numeric'); }
+        if ( yumFactor < 1 ) { throw new BadRequest('Cake yum factor must be between 1 and 5'); }
+        if ( yumFactor > 5 ) { throw new BadRequest('Cake yum factor must be between 1 and 5'); }
         this.yumFactor = yumFactor;
     }
 }
@@ -95,10 +133,7 @@ app.put('/cakes/:id', (req, res, next) => {
     }
 
     // Update record
-    cake.name = name;
-    cake.comment = comment;
-    cake.imageUrl = imageUrl;
-    cake.yumFactor = yumFactor;
+    cake.update({ name, comment, imageUrl, yumFactor });
 
     res.json({ cake });
 });
