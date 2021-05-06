@@ -1,0 +1,11 @@
+{
+    "defaultEnv": "local",
+    "local": {
+        "driver": "mysql",
+        "host": "0.0.0.0",
+        "port": 3306,
+        "user": "cake.api",
+        "password": "Passw0rd",
+        "database": "cake_app"
+    }
+}

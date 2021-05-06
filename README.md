@@ -19,7 +19,19 @@ nvm install 12
 Install global dependencies
 
 ```
-$ npm install --global typescript mocha
+$ npm install --global typescript mocha db-migrate db-migrate-mysql
+```
+
+Start a temporary local DB with Docker
+
+```
+$ docker run --name cake-db -e MYSQL_ROOT_PASSWORD=Passw0rd -e MYSQL_USER=cake.api -e MYSQL_PASSWORD=Passw0rd -e MYSQL_DATABASE=cake_app -p 3306:3306 mariadb
+```
+
+Run DB migrations with:
+
+```
+$ db-migrate up
 ```
 
 Build and run the API with:
