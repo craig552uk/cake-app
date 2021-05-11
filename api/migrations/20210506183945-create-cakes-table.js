@@ -21,6 +21,8 @@ exports.up = function(db) {
     comment VARCHAR(512) NOT NULL,
     imageUrl VARCHAR(256) NOT NULL,
     yumFactor TINYINT NOT NULL,
+    createdAt TIMESTAMP(3) NOT NULL DEFAULT NOW(3),
+    updatedAt TIMESTAMP(3) NOT NULL DEFAULT NOW(3) ON UPDATE NOW(3),
 
     CONSTRAINT unique_name UNIQUE (name)
   )`);

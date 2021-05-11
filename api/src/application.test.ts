@@ -1,11 +1,12 @@
 import 'mocha';
 import * as assert from 'assert';
 import * as supertest from 'supertest';
-import { app, CAKES, Cake, clearCakes } from './application';
+import { Cake } from './cake.model';
+import { CakeController } from './cake.controller';
+import { app } from './application';
 
 // Create test wrapper for application
 const testApp = supertest(app) as supertest.SuperTest<supertest.Test>;
-
 
 // Test root endpoint
 describe('GET /', () => { 
@@ -20,16 +21,16 @@ describe('GET /', () => {
 // Test getting Cakes
 describe('GET /cakes', () => { 
 
-    before(() => {
-        CAKES.push(new Cake(0, 'Cream Cake', 'Yummy', 'http://foo.com/cake1.png', 2));
-        CAKES.push(new Cake(1, 'Birthday Cake', 'My birthday cake', 'http://foo.com/cake2.png', 4));
-        CAKES.push(new Cake(2, 'Chocolate Cake', 'Super Yummy', 'http://foo.com/cake3.png', 5));
-        CAKES.push(new Cake(3, 'Lemon Drizzle', 'Yummy', 'http://foo.com/cake4.png', 2));
-        CAKES.push(new Cake(4, 'Mouldy Cake', 'Yuk', 'http://foo.com/cake4.png', 0));
+    before(async () => {
+        await CakeController.createCake(new Cake({ name:'Cream Cake', comment: 'Yummyy', imageUrl: 'http://foo.com/cake1.png', yumFactor: 2 }));
+        await CakeController.createCake(new Cake({ name:'Birthday Cake', comment: 'My birthday cake', imageUrl: 'http://foo.com/cake2.png', yumFactor: 4 }));
+        await CakeController.createCake(new Cake({ name:'Chocolate Cake', comment: 'Super Yummy', imageUrl: 'http://foo.com/cake3.png', yumFactor: 5 }));
+        await CakeController.createCake(new Cake({ name:'Lemon Drizzle', comment: 'Yummy', imageUrl: 'http://foo.com/cake4.png', yumFactor: 2 }));
+        await CakeController.createCake(new Cake({ name:'Mouldy Cake', comment: 'Yukkky', imageUrl: 'http://foo.com/cake4.png', yumFactor: 1 }));
     });
 
-    after(() => {
-        clearCakes();
+    after(async () => {
+        await CakeController.deleteAllCakes();
     });
 
     it('should return an array of all Cakes', async () => {
@@ -54,16 +55,18 @@ describe('GET /cakes', () => {
 
 // Test getting a Cake by id
 describe('GET /cakes/:id', () => { 
-    before(() => {
-        CAKES.push(new Cake(0, 'Cream Cake', 'Yummy', 'http://foo.com/cake1.png', 2));
-        CAKES.push(new Cake(1, 'Birthday Cake', 'My birthday cake', 'http://foo.com/cake2.png', 4));
-        CAKES.push(new Cake(2, 'Chocolate Cake', 'Super Yummy', 'http://foo.com/cake3.png', 5));
-        CAKES.push(new Cake(3, 'Lemon Drizzle', 'Yummy', 'http://foo.com/cake4.png', 2));
-        CAKES.push(new Cake(4, 'Mouldy Cake', 'Yuk', 'http://foo.com/cake4.png', 0));
+    let cake: any;
+
+    before(async () => {
+        cake = await CakeController.createCake(new Cake({ name:'Cream Cake', comment: 'Yummyy', imageUrl: 'http://foo.com/cake1.png', yumFactor: 2 }));
+        await CakeController.createCake(new Cake({ name:'Birthday Cake', comment: 'My birthday cake', imageUrl: 'http://foo.com/cake2.png', yumFactor: 4 }));
+        await CakeController.createCake(new Cake({ name:'Chocolate Cake', comment: 'Super Yummy', imageUrl: 'http://foo.com/cake3.png', yumFactor: 5 }));
+        await CakeController.createCake(new Cake({ name:'Lemon Drizzle', comment: 'Yummy', imageUrl: 'http://foo.com/cake4.png', yumFactor: 2 }));
+        await CakeController.createCake(new Cake({ name:'Mouldy Cake', comment: 'Yukkky', imageUrl: 'http://foo.com/cake4.png', yumFactor: 1 }));
     });
 
-    after(() => {
-        clearCakes();
+    after(async () => {
+        await CakeController.deleteAllCakes();
     });
 
     it('should return Not Found if no Cake is found', async () => {
@@ -74,7 +77,7 @@ describe('GET /cakes/:id', () => {
     });
 
     it('should retun one Cake by id', async () => {
-        await testApp.get('/cakes/2')
+        await testApp.get(`/cakes/${cake.id}`)
         .expect(200)
         .expect('content-type', /json/)
         .expect((res) => {
@@ -86,21 +89,17 @@ describe('GET /cakes/:id', () => {
             assert.ok('imageUrl' in res.body.cake);
             assert.ok('yumFactor' in res.body.cake);
             
-            assert.strictEqual(res.body.cake.id, 2);
-            assert.strictEqual(res.body.cake.name, 'Chocolate Cake');
-            assert.strictEqual(res.body.cake.comment, 'Super Yummy');
-            assert.strictEqual(res.body.cake.imageUrl, 'http://foo.com/cake3.png');
-            assert.strictEqual(res.body.cake.yumFactor, 5);
+            assert.strictEqual(res.body.cake.id, cake.id);
+            assert.strictEqual(res.body.cake.name, cake.name);
+            assert.strictEqual(res.body.cake.comment, cake.comment);
+            assert.strictEqual(res.body.cake.imageUrl, cake.imageUrl);
+            assert.strictEqual(res.body.cake.yumFactor, cake.yumFactor);
         });
     });
 });
 
 // Test adding a Cake
 describe('POST /cakes', () => { 
-
-    after(() => {
-        clearCakes();
-    });
 
     xit('should require a name', async () => {  });
 
@@ -125,10 +124,6 @@ describe('POST /cakes', () => {
 
 // Test updating a Cake
 describe('PUT /cakes/:id', () => { 
-
-    after(() => {
-        clearCakes();
-    });
 
     it('should return Not Found if no Cake is found', async () => {
         await testApp.put('/cakes/99999')
@@ -160,10 +155,6 @@ describe('PUT /cakes/:id', () => {
 
 // Test deleting a Cake
 describe('DELETE /cakes/:id', () => { 
-
-    after(() => {
-        clearCakes();
-    });
 
     it('should return Not Found if no Cake is found', async () => {
         await testApp.delete('/cakes/99999')
