@@ -24,6 +24,15 @@ app.use((req, res, next) => {
     next();
 });
 
+// CORS headers
+app.use((req, res, next) =>  {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Methods', 'OPTIONS, GET, POST, PATCH, DELETE');
+    if (req.method === 'OPTIONS') { return res.end(); }
+    next();
+});
+
 app.get('/', (req, res) => {
     res.json({ message: 'Hello World!' });
 });
