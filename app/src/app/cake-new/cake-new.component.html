@@ -1,0 +1,30 @@
+<h1>Add a Cake</h1>
+
+<form (submit)="create()" autocomplete="off">
+
+    <div>
+        <label for="cake-name">Name</label>
+        <input type="text" name="cake-name" [(ngModel)]="cake.name">
+    </div>
+
+    <div>
+        <label for="cake-comment">Comment</label>
+        <input type="text" name="cake-comment" [(ngModel)]="cake.comment">
+    </div>
+
+    <div>
+        <label for="cake-imageUrl">Image URL</label>
+        <input type="text" name="cake-imageUrl" [(ngModel)]="cake.imageUrl">
+    </div>
+
+    <div>
+        <label for="cake-yumFactor">Yum Factor</label>
+        <input type="text" name="cake-yumFactor" [(ngModel)]="cake.yumFactor">
+    </div>
+
+    <div>
+        <button type="submit">Add Cake</button>
+        <a routerLink="/list">Cancel</a>
+    </div>
+
+</form>

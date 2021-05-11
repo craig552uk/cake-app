@@ -1,20 +1,24 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CakeListComponent } from './cake-list/cake-list.component';
+import { CakeNewComponent } from './cake-new/cake-new.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CakeListComponent
+    CakeListComponent,
+    CakeNewComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
