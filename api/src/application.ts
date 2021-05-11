@@ -12,6 +12,18 @@ export const app = express();
 app.use(json());
 app.use(urlencoded({ extended: true }));
 
+// Log HTTP requests
+app.use((req, res, next) => {
+    function requestLogger() {
+        res.removeListener('finish', requestLogger);
+        res.removeListener('close', requestLogger);
+        console.log(`${res.statusCode} ${req.method} ${req.url}`);
+    }
+    res.on('finish', requestLogger);
+    res.on('close', requestLogger);
+    next();
+});
+
 app.get('/', (req, res) => {
     res.json({ message: 'Hello World!' });
 });
