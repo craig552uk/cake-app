@@ -19,7 +19,7 @@ nvm install 12
 Install global dependencies
 
 ```
-$ npm install --global typescript mocha db-migrate db-migrate-mysql
+$ npm install --global typescript mocha db-migrate db-migrate-mysql @angular/cli
 ```
 
 Start a temporary local DB with Docker
@@ -50,3 +50,12 @@ Run unit tests with:
 ```
 npm test
 ```
+
+Build and run the front-end application with:
+
+```
+cd app
+ng serve
+```
+
+Open http://localhost:4300 in your browser.
