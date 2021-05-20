@@ -1,8 +1,9 @@
 import { app } from './application';
 
-const port = 1337;
-const host = '0.0.0.0';
+// Get config from environment or use local dev defaults
+const HTTP_PORT = process.env.HTTP_PORT || '1337';
+const HTTP_HOST = process.env.HTTP_HOTS || '0.0.0.0';
 
-app.listen(port, host, () => {
-    console.log(`Listening on http://${host}:${port}`);
+app.listen(parseInt(HTTP_PORT, 10), HTTP_HOST, () => {
+    console.log(`Listening on http://${HTTP_HOST}:${HTTP_PORT}`);
 });

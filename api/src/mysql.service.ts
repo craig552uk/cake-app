@@ -2,13 +2,14 @@
  * Singleton MySQL utility class
  */
 
-import { Connection, createPool, createConnection, Pool } from 'mysql';
+import { Connection, createPool, Pool } from 'mysql';
 
-const MYSQL_DATABASE = 'cake_app';
-const MYSQL_HOST = '0.0.0.0';
-const MYSQL_PASSWORD = 'Passw0rd';
-const MYSQL_PORT = 3306;
-const MYSQL_USER = 'cake.api';
+// Get config from environment or use local dev defaults
+const MYSQL_DATABASE = process.env.MYSQL_DATABASE || 'cake_app';
+const MYSQL_HOST = process.env.MYSQL_HOST || '0.0.0.0';
+const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD || 'Passw0rd';
+const MYSQL_PORT = process.env.MYSQL_PORT || '3306';
+const MYSQL_USER = process.env.MYSQL_USER || 'cake.api';
 
 export class MySQLService {
 
@@ -27,7 +28,7 @@ export class MySQLService {
             database: MYSQL_DATABASE,
             host: MYSQL_HOST,
             password: MYSQL_PASSWORD,
-            port: MYSQL_PORT,
+            port: parseInt(MYSQL_PORT, 10),
             user: MYSQL_USER,
             charset: 'utf8mb4',
             typeCast(field, next) {
