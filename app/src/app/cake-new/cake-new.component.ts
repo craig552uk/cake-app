@@ -22,7 +22,7 @@ export class CakeNewComponent implements OnInit {
 
   create(){
     this.cakeServices.create(this.cake).subscribe(c => {
-      this.router.navigate(['list']);
+      this.router.navigate(['cakes']);
     });
   }
 }

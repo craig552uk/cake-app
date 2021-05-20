@@ -1,11 +1,10 @@
-<p>cake-list works!</p>
+<h1>My Cakes</h1>
 
-<ul>
-    <li *ngFor="let cake of cakes">
-        {{ cake.id }}
-        {{ cake.name }}
-        {{ cake.comment }}
-        {{ cake.imageUrl }}
-        {{ cake.yumFactor }}
-    </li>
-</ul>
+<div class="mb-3">
+    <a href="/new" class="btn btn-primary">Add a Cake</a>
+</div>
+
+<a *ngFor="let cake of cakes" class="cake card p-2 mb-3" href="/cakes/{{cake.id}}">
+    <img class="cake-img" src="{{ cake.imageUrl }}" alt="{{ cake.name }}">
+    <h2>{{ cake.name }}</h2>
+</a>

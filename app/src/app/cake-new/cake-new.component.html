@@ -2,29 +2,29 @@
 
 <form (submit)="create()" autocomplete="off">
 
-    <div>
-        <label for="cake-name">Name</label>
-        <input type="text" name="cake-name" [(ngModel)]="cake.name">
+    <div class="mb-3">
+        <label class="form-label" for="cake-name">Name</label>
+        <input class="form-control" type="text" name="cake-name" [(ngModel)]="cake.name">
     </div>
 
-    <div>
-        <label for="cake-comment">Comment</label>
-        <input type="text" name="cake-comment" [(ngModel)]="cake.comment">
+    <div class="mb-3">
+        <label class="form-label" for="cake-comment">Comment</label>
+        <input class="form-control" type="text" name="cake-comment" [(ngModel)]="cake.comment">
     </div>
 
-    <div>
-        <label for="cake-imageUrl">Image URL</label>
-        <input type="text" name="cake-imageUrl" [(ngModel)]="cake.imageUrl">
+    <div class="mb-3">
+        <label class="form-label" for="cake-imageUrl">Image URL</label>
+        <input class="form-control" type="text" name="cake-imageUrl" [(ngModel)]="cake.imageUrl">
     </div>
 
-    <div>
-        <label for="cake-yumFactor">Yum Factor</label>
-        <input type="text" name="cake-yumFactor" [(ngModel)]="cake.yumFactor">
+    <div class="mb-3">
+        <label class="form-label" for="cake-yumFactor">Yum Factor</label>
+        <input class="form-control" type="text" name="cake-yumFactor" [(ngModel)]="cake.yumFactor">
     </div>
 
-    <div>
-        <button type="submit">Add Cake</button>
-        <a routerLink="/list">Cancel</a>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Add Cake</button>
+        <a class="btn btn-link" routerLink="/cakes">Cancel</a>
     </div>
 
 </form>
